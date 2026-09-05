@@ -38,6 +38,7 @@ const server=http.createServer(async(req,res)=>{
     if(path==='/health')return json(res,200,{ok:true});
     if(path==='/api/store'&&req.method==='GET')return json(res,200,{price,currency:'IDR',whatsapp:process.env.STORE_WHATSAPP||'',shippingFee:process.env.SHIPPING_FEE?Number(process.env.SHIPPING_FEE):null,paymentLabel:process.env.PAYMENT_LABEL||'Pembayaran dikonfirmasi setelah pesanan diterima'});
     if(path==='/api/orders'&&req.method==='POST'){
+      if(process.env.ORDERS_ENABLED!=='true')return json(res,503,{error:'Saat ini checkout hanya menyimpan data penerima di perangkat. Pengiriman pesanan belum diaktifkan.'});
       if(limited('orders:'+client))return json(res,429,{error:'Terlalu banyak percobaan. Silakan coba beberapa saat lagi.'});
       const key=req.headers['idempotency-key'];if(!/^[a-zA-Z0-9-]{16,80}$/.test(key||''))return json(res,400,{error:'Identitas pesanan tidak valid.'});const data=validateOrder(await body(req));
       const task=queue.then(async()=>{const recordPath=join(dataDir,hash(key).toString('hex')+'.json');try{const old=JSON.parse(await readFile(recordPath,'utf8'));if(old.requestHash!==hash(JSON.stringify(data)).toString('hex'))return json(res,409,{error:'Data berubah. Muat ulang halaman sebelum membuat pesanan baru.'});return json(res,200,{id:old.id,token:old.token,quantity:old.quantity,subtotal:old.subtotal});}catch(err){if(err.code!=='ENOENT')throw err;}

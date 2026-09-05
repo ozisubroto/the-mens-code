@@ -1,5 +1,5 @@
 # The Men's Code
 
-Responsive store with original campaign artwork. Product price: IDR 98,000. Checkout captures shipping details; payment and shipping API integrations are pending.
+Responsive storefront using original campaign artwork. Price: IDR 98,000. Buy buttons open recipient/address entry. Draft data is stored only on the shopper's device; order submission is disabled until shipping/payment APIs and persistent storage are configured.
 
-Run `npm start`. Test with `npm test`. Persistent order storage uses DATA_DIR. Admin access at /admin uses ADMIN_PASSWORD and SESSION_SECRET environment variables.
+Run npm start. Run npm test for server checks. ORDERS_ENABLED must remain false until order processing is intentionally launched.

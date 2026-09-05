@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-process.env.NODE_ENV='test';process.env.ADMIN_PASSWORD='test-password-only';process.env.DATA_DIR=await mkdtemp(join(tmpdir(),'tmc-test-'));
+process.env.NODE_ENV='test';process.env.ORDERS_ENABLED='true';process.env.ADMIN_PASSWORD='test-password-only';process.env.DATA_DIR=await mkdtemp(join(tmpdir(),'tmc-test-'));
 const {server}=await import('./server.mjs');await new Promise(r=>server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+server.address().port;
 const data={name:'Test Customer',phone:'081234567890',address:'Test Address 123',city:'Test City',postalCode:'12345',quantity:2,consent:true};
 after(async()=>{await new Promise(r=>server.close(r));await rm(process.env.DATA_DIR,{recursive:true,force:true});});
