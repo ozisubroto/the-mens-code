@@ -11,7 +11,7 @@ const sessionSecret=process.env.SESSION_SECRET||randomBytes(32).toString('hex');
 await mkdir(dataDir,{recursive:true});
 const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
 const files={'/':'index.html','/index.html':'index.html','/styles.css':'styles.css','/app.js':'app.js','/assets/mockup.png':'assets/mockup.png','/admin':'admin.html','/admin.js':'admin.js'};
-for(const asset of ['hero-hd.webp','product-hd.webp','campaign-hd.webp','cta-hd.webp','avatars-hd.webp','logo.svg','logo-wide.svg'])files['/assets/'+asset]='assets/'+asset;
+for(const asset of ['hero-hd.webp','hero-4k.webp','product-hd.webp','campaign-hd.webp','cta-hd.webp','avatars-hd.webp','logo.svg','logo-wide.svg'])files['/assets/'+asset]='assets/'+asset;
 const limits=new Map();
 function limited(key,max=15){const now=Date.now();const record=limits.get(key);if(!record||now-record.at>600000){limits.set(key,{at:now,n:1});return false;}return ++record.n>max;}
 setInterval(()=>{const now=Date.now();for(const [k,v]of limits)if(now-v.at>600000)limits.delete(k);},600000).unref();
